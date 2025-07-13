@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>📘 A2 – 200 Verben Flashcards</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; text-align: center; }
+    .card { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 80%; margin: auto; }
+    .verb { font-size: 26px; color: #003366; font-weight: bold; }
+    .sentence { font-size: 20px; margin-top: 10px; }
+    .translation { font-size: 20px; margin-top: 10px; display: none; color: #990000; }
+    button { margin: 10px; padding: 10px 20px; font-size: 16px; background: #007acc; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #005a99; }
+    #listContainer { display: none; margin-top: 30px; background: #fff; padding: 20px; border-radius: 10px; text-align: left; max-width: 900px; margin: auto; }
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+<h1>📘 200 Verben A2 – Flashcards</h1>
+
+<div class="card">
+  <div class="verb" id="verb"></div>
+  <div class="sentence" id="sentence"></div>
+  <div class="translation" id="translation"></div>
+</div>
+
+<button onclick="playAudio()">🔊 نطق</button>
+<button onclick="showTranslation()">إظهار الترجمة</button>
+<button onclick="nextCard()">التالي</button>
+<button onclick="toggleList()">📋 عرض كل الجمل</button>
+
+<div id="listContainer">
+  <h2>📝 قائمة الأفعال والجمل:</h2>
+  <ul><li><strong>essen</strong>: Ich esse gern Pizza. – أنا أحب أكل البيتزا.</li>
+    <li><strong>trinken</strong>: Er trinkt Wasser. – هو يشرب الماء.</li>
+    <li><strong>gehen</strong>: Wir gehen ins Kino. – نحن نذهب إلى السينما.</li>
+    <li><strong>kommen</strong>: Sie kommt aus Deutschland. – هي من ألمانيا.</li>
+    <li><strong>lesen</strong>: Ich lese ein Buch. – أنا أقرأ كتاباً.</li>
+    <li><strong>schreiben</strong>: Er schreibt einen Brief. – هو يكتب رسالة.</li>
+    <li><strong>sprechen</strong>: Wir sprechen Deutsch. – نحن نتحدث الألمانية.</li>
+    <li><strong>hören</strong>: Ich höre Musik. – أنا أستمع إلى الموسيقى.</li>
+    <li><strong>sehen</strong>: Sie sieht einen Film. – هي تشاهد فيلماً.</li>
+    <li><strong>machen</strong>: Ich mache meine Hausaufgaben. – أنا أقوم بواجبي المنزلي.</li>
+</ul>
+</div>
+
+<script>
+   const cards = [
+  { verb: "essen", sentence: "Ich esse gern Pizza.", translation: "أنا أحب أكل البيتزا." },
+  { verb: "trinken", sentence: "Er trinkt Wasser.", translation: "هو يشرب الماء." },
+  { verb: "gehen", sentence: "Wir gehen ins Kino.", translation: "نحن نذهب إلى السينما." },
+  { verb: "kommen", sentence: "Sie kommt aus Deutschland.", translation: "هي من ألمانيا." },
+  { verb: "lesen", sentence: "Ich lese ein Buch.", translation: "أنا أقرأ كتابًا." },
+  { verb: "schreiben", sentence: "Er schreibt einen Brief.", translation: "هو يكتب رسالة." },
+  { verb: "sprechen", sentence: "Wir sprechen Deutsch.", translation: "نحن نتحدث الألمانية." },
+  { verb: "hören", sentence: "Ich höre Musik.", translation: "أنا أستمع إلى الموسيقى." },
+  { verb: "sehen", sentence: "Sie sieht einen Film.", translation: "هي تشاهد فيلمًا." },
+  { verb: "machen", sentence: "Ich mache meine Hausaufgaben.", translation: "أنا أقوم بواجبي المنزلي." },
+  { verb: "kaufen", sentence: "Ich kaufe ein neues Auto.", translation: "أنا أشتري سيارة جديدة." },
+  { verb: "verkaufen", sentence: "Er verkauft sein altes Fahrrad.", translation: "هو يبيع دراجته القديمة." },
+  { verb: "arbeiten", sentence: "Sie arbeitet im Büro.", translation: "هي تعمل في المكتب." },
+  { verb: "lernen", sentence: "Ich lerne Deutsch.", translation: "أنا أتعلم الألمانية." },
+  { verb: "wohnen", sentence: "Wir wohnen in Berlin.", translation: "نحن نسكن في برلين." },
+  { verb: "leben", sentence: "Er lebt in einer Großstadt.", translation: "هو يعيش في مدينة كبيرة." },
+  { verb: "haben", sentence: "Ich habe Hunger.", translation: "أنا جائع." },
+  { verb: "sein", sentence: "Du bist nett.", translation: "أنت لطيف." },
+  { verb: "bleiben", sentence: "Ich bleibe zu Hause.", translation: "أنا أبقى في المنزل." },
+  { verb: "fahren", sentence: "Wir fahren mit dem Zug.", translation: "نحن نسافر بالقطار." },
+  { verb: "fliegen", sentence: "Sie fliegt nach Paris.", translation: "هي تسافر إلى باريس." },
+  { verb: "schwimmen", sentence: "Ich schwimme gern im Meer.", translation: "أنا أحب السباحة في البحر." },
+  { verb: "tanzen", sentence: "Sie tanzt sehr gut.", translation: "هي ترقص جيداً جداً." },
+  { verb: "singen", sentence: "Er singt ein Lied.", translation: "هو يغني أغنية." },
+  { verb: "spielen", sentence: "Wir spielen Fußball.", translation: "نحن نلعب كرة القدم." },
+  { verb: "finden", sentence: "Ich finde meinen Schlüssel nicht.", translation: "لا أجد مفتاحي." },
+  { verb: "fragen", sentence: "Ich frage den Lehrer.", translation: "أنا أسأل المعلم." },
+  { verb: "antworten", sentence: "Er antwortet schnell.", translation: "هو يجيب بسرعة." },
+  { verb: "suchen", sentence: "Sie sucht ihre Brille.", translation: "هي تبحث عن نظارتها." },
+  { verb: "erklären", sentence: "Der Lehrer erklärt die Regel.", translation: "المعلم يشرح القاعدة." },
+  { verb: "warten", sentence: "Ich warte auf dich.", translation: "أنا أنتظرك." },
+  { verb: "öffnen", sentence: "Er öffnet die Tür.", translation: "هو يفتح الباب." },
+  { verb: "schließen", sentence: "Sie schließt das Fenster.", translation: "هي تغلق النافذة." },
+  { verb: "beginnen", sentence: "Der Film beginnt um 8 Uhr.", translation: "الفيلم يبدأ الساعة 8." },
+  { verb: "enden", sentence: "Der Kurs endet im Juli.", translation: "الدورة تنتهي في يوليو." },
+  { verb: "helfen", sentence: "Ich helfe dir gern.", translation: "أنا أحب مساعدتك." },
+  { verb: "wissen", sentence: "Ich weiß die Antwort.", translation: "أنا أعرف الإجابة." },
+  { verb: "kennen", sentence: "Kennen Sie Herrn Müller?", translation: "هل تعرف السيد مولر؟" },
+  { verb: "glauben", sentence: "Ich glaube dir.", translation: "أنا أصدقك." },
+  { verb: "vergessen", sentence: "Ich vergesse oft Namen.", translation: "أنا أنسى الأسماء غالباً." },
+  { verb: "erzählen", sentence: "Er erzählt eine Geschichte.", translation: "هو يروي قصة." },
+  { verb: "zeigen", sentence: "Kannst du mir den Weg zeigen?", translation: "هل يمكنك أن تريني الطريق؟" },
+  { verb: "brauchen", sentence: "Ich brauche deine Hilfe.", translation: "أنا بحاجة إلى مساعدتك." },
+  { verb: "bekommen", sentence: "Ich bekomme einen Brief.", translation: "أنا أتلقى رسالة." },
+  { verb: "geben", sentence: "Er gibt mir ein Buch.", translation: "هو يعطيني كتاباً." },
+  { verb: "nehmen", sentence: "Ich nehme einen Kaffee.", translation: "أنا آخذ قهوة." },
+  { verb: "mitbringen", sentence: "Ich bringe dir Blumen mit.", translation: "أنا أحضر لك الزهور." },
+  { verb: "mitnehmen", sentence: "Ich nehme den Regenschirm mit.", translation: "أنا آخذ المظلة معي." },
+  { verb: "anrufen", sentence: "Ich rufe dich morgen an.", translation: "سأتصل بك غداً." },
+  { verb: "aufstehen", sentence: "Ich stehe um 7 Uhr auf.", translation: "أنا أستيقظ الساعة 7." },
+  { verb: "einschlafen", sentence: "Ich schlafe schnell ein.", translation: "أنا أنام بسرعة." },
+  { verb: "aufwachen", sentence: "Ich wache früh auf.", translation: "أنا أستيقظ مبكراً." },
+  { verb: "fernsehen", sentence: "Ich sehe gern fern.", translation: "أنا أحب مشاهدة التلفزيون." },
+  { verb: "einkaufen", sentence: "Ich kaufe im Supermarkt ein.", translation: "أنا أتسوق في السوبر ماركت." },
+  { verb: "aufräumen", sentence: "Ich räume mein Zimmer auf.", translation: "أنا أرتب غرفتي." },
+  { verb: "putzen", sentence: "Ich putze die Fenster.", translation: "أنا أنظف النوافذ." },
+  { verb: "kochen", sentence: "Ich koche Spaghetti.", translation: "أنا أطبخ سباغيتي." },
+  { verb: "backen", sentence: "Sie backt einen Kuchen.", translation: "هي تخبز كعكة." },
+  { verb: "bestellen", sentence: "Ich bestelle eine Pizza.", translation: "أنا أطلب بيتزا." },
+  { verb: "bezahlen", sentence: "Ich bezahle die Rechnung.", translation: "أنا أدفع الفاتورة." },
+  { verb: "reservieren", sentence: "Ich reserviere einen Tisch.", translation: "أنا أحجز طاولة." },
+  { verb: "buchen", sentence: "Ich buche einen Flug.", translation: "أنا أحجز رحلة طيران." },
+  { verb: "mieten", sentence: "Ich miete ein Auto.", translation: "أنا أستأجر سيارة." },
+  { verb: "vermieten", sentence: "Er vermietet seine Wohnung.", translation: "هو يؤجر شقته." },
+  { verb: "unterschreiben", sentence: "Bitte unterschreiben Sie hier.", translation: "الرجاء التوقيع هنا." },
+  { verb: "untersuchen", sentence: "Der Arzt untersucht den Patienten.", translation: "الطبيب يفحص المريض." },
+  { verb: "besuchen", sentence: "Ich besuche meine Freunde.", translation: "أنا أزور أصدقائي." },
+  { verb: "feiern", sentence: "Wir feiern Geburtstag.", translation: "نحن نحتفل بعيد ميلاد." },
+  { verb: "gratulieren", sentence: "Ich gratuliere dir zum Geburtstag.", translation: "أهنئك بعيد ميلادك." },
+  { verb: "schenken", sentence: "Ich schenke dir ein Buch.", translation: "أنا أهديك كتاباً." },
+  { verb: "erinnern", sentence: "Ich erinnere mich an ihn.", translation: "أنا أتذكره." },
+  { verb: "vergessen", sentence: "Ich habe meinen Schlüssel vergessen.", translation: "لقد نسيت مفتاحي." },
+  { verb: "verstehen", sentence: "Ich verstehe die Frage nicht.", translation: "أنا لا أفهم السؤال." },
+  { verb: "meinen", sentence: "Was meinst du?", translation: "ماذا تقصد؟" },
+  { verb: "denken", sentence: "Ich denke oft an dich.", translation: "أنا أفكر فيك غالباً." },
+  { verb: "glauben", sentence: "Ich glaube an Gott.", translation: "أنا أؤمن بالله." },
+  { verb: "hoffen", sentence: "Ich hoffe, es geht dir gut.", translation: "آمل أن تكون بخير." },
+  { verb: "wünschen", sentence: "Ich wünsche dir alles Gute.", translation: "أتمنى لك كل التوفيق." },
+  { verb: "fühlen", sentence: "Ich fühle mich müde.", translation: "أشعر بالتعب." },
+  { verb: "ändern", sentence: "Er ändert seine Meinung.", translation: "هو يغير رأيه." },
+  { verb: "verbessern", sentence: "Ich möchte mein Deutsch verbessern.", translation: "أريد أن أحسن لغتي الألمانية." },
+  { verb: "üben", sentence: "Ich übe jeden Tag Klavier.", translation: "أنا أتدرب على البيانو كل يوم." },
+  { verb: "trainieren", sentence: "Ich trainiere im Fitnessstudio.", translation: "أنا أتدرب في صالة الألعاب الرياضية." },
+  { verb: "studieren", sentence: "Ich studiere an der Universität.", translation: "أنا أدرس في الجامعة." },
+  { verb: "lernen", sentence: "Ich lerne viel für die Prüfung.", translation: "أنا أتعلم كثيراً للامتحان." },{ verb: "erklären", sentence: "Kannst du mir das erklären?", translation: "هل يمكنك أن تشرح لي هذا؟" },
+  { verb: "wiederholen", sentence: "Bitte wiederholen Sie den Satz.", translation: "الرجاء تكرار الجملة." },
+  { verb: "korrigieren", sentence: "Der Lehrer korrigiert die Fehler.", translation: "المعلم يصحح الأخطاء." },
+  { verb: "passieren", sentence: "Was ist passiert?", translation: "ماذا حدث؟" },
+  { verb: "geschehen", sentence: "Das ist nicht oft geschehen.", translation: "هذا لم يحدث كثيراً." },
+  { verb: "erreichen", sentence: "Ich habe mein Ziel erreicht.", translation: "لقد حققت هدفي." },
+  { verb: "schaffen", sentence: "Ich schaffe das!", translation: "سأنجح في ذلك!" },
+  { verb: "benutzen", sentence: "Ich benutze mein Handy oft.", translation: "أنا أستخدم هاتفي كثيراً." },
+  { verb: "nutzen", sentence: "Wir nutzen die Gelegenheit.", translation: "نحن نستغل الفرصة." },
+  { verb: "verwenden", sentence: "Ich verwende dieses Wort oft.", translation: "أنا أستخدم هذه الكلمة كثيراً." },
+  { verb: "zeigen", sentence: "Er zeigt mir seine neue Wohnung.", translation: "هو يريني شقته الجديدة." },
+  { verb: "erhalten", sentence: "Ich erhalte oft E-Mails.", translation: "أنا أتلقى رسائل بريد إلكتروني غالباً." },
+  { verb: "senden", sentence: "Ich sende dir eine Nachricht.", translation: "أنا أرسل لك رسالة." },
+  { verb: "schicken", sentence: "Er schickt mir ein Paket.", translation: "هو يرسل لي طرداً." },
+  { verb: "empfangen", sentence: "Ich empfange Gäste.", translation: "أنا أستقبل ضيوفاً." },
+  { verb: "zurückgeben", sentence: "Ich gebe dir das Buch zurück.", translation: "أنا أعيد لك الكتاب." },
+  { verb: "zurückkommen", sentence: "Wann kommst du zurück?", translation: "متى تعود؟" },
+  { verb: "mitmachen", sentence: "Möchtest du mitmachen?", translation: "هل ترغب في المشاركة؟" },
+  { verb: "teilnehmen", sentence: "Ich nehme am Kurs teil.", translation: "أنا أشارك في الدورة." },
+  { verb: "vorbereiten", sentence: "Ich bereite das Essen vor.", translation: "أنا أعد الطعام." },
+  { verb: "planen", sentence: "Wir planen eine Reise.", translation: "نحن نخطط لرحلة." },
+  { verb: "organisieren", sentence: "Sie organisiert eine Party.", translation: "هي تنظم حفلة." },
+  { verb: "entscheiden", sentence: "Ich muss eine Entscheidung treffen.", translation: "يجب أن أتخذ قراراً." },
+  { verb: "versuchen", sentence: "Ich versuche es noch einmal.", translation: "سأحاول مرة أخرى." },
+  { verb: "wiederholen", sentence: "Wir wiederholen die Lektion.", translation: "نحن نراجع الدرس." },
+  { verb: "erinnern", sentence: "Er erinnert mich an meinen Bruder.", translation: "هو يذكرني بأخي." },
+  { verb: "fragen", sentence: "Ich frage nach dem Weg.", translation: "أنا أسأل عن الطريق." },
+  { verb: "antworten", sentence: "Ich antworte auf deine Frage.", translation: "أنا أجيب على سؤالك." },
+  { verb: "erzählen", sentence: "Ich erzähle dir von meinem Urlaub.", translation: "أنا أروي لك عن عطلتي." },
+  { verb: "beschreiben", sentence: "Kannst du das beschreiben?", translation: "هل يمكنك وصف ذلك؟" },
+  { verb: "erklären", sentence: "Ich erkläre dir die Aufgabe.", translation: "أنا أشرح لك المهمة." },
+  { verb: "vergleichen", sentence: "Wir vergleichen die Preise.", translation: "نحن نقارن الأسعار." }
+];
+
+    let current = 0;
+
+    function showCard() {
+        document.getElementById('verb').textContent = cards[current].verb;
+        document.getElementById('sentence').textContent = cards[current].sentence;
+        document.getElementById('translation').textContent = cards[current].translation;
+        document.getElementById('translation').style.display = "none";
+    }
+
+    function showTranslation() {
+        document.getElementById('translation').style.display = "block";
+    }
+
+    function nextCard() {
+        current = (current + 1) % cards.length;
+        showCard();
+    }
+
+    function toggleList() {
+        const list = document.getElementById('listContainer');
+        list.style.display = (list.style.display === "none") ? "block" : "none";
+    }
+
+    function playAudio() {
+        const utterance = new SpeechSynthesisUtterance(cards[current].verb);
+        utterance.lang = 'de-DE';
+        window.speechSynthesis.speak(utterance);
+    }
+
+    showCard();
+</script>
+</body>
+</html>
